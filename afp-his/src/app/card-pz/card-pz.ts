@@ -1,8 +1,8 @@
-import { Component, signal } from '@angular/core';
+import { Component, input, signal } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { Button } from "primeng/button";
 
-interface Paziente {
+export interface Paziente {
   id: string;
   nome: string;
   cognome: string;
@@ -21,19 +21,22 @@ interface Paziente {
 })
 export class CardPz {
   // nome: string = 'Mario Rossi'; --> codice vecchio, ora uso i signal
-  paziente = signal<Paziente>({
-    id: '23',
-    nome: 'Mario',
-    cognome: 'Rossi',
-    braccialetto: '123',
-    eta: 25,
-    codiceColore: 'rosso',
-    note: 'Trauma',
-    patologia: 'C19'
-  });
-  
-  cambiaNome(){
-    this.paziente.set('Lucio');
-  }
+  paziente = input.required<Paziente>();
 
+  setColoreDiStato() {
+    switch (this.paziente().codiceColore) {
+      case 'rosso':
+        return 'border-red-600';
+      case 'arancione':
+        return 'border-orange-600';
+      case 'azzurro':
+        return 'border-blue-600';
+      case 'verde':
+        return 'border-green-600';
+      case 'bianco':
+        return 'border-gray-600';
+      default:
+        return '';
+    }
+  }
 }
