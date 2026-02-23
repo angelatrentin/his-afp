@@ -22,6 +22,11 @@ export interface Paziente {
 export class CardPz {
   // nome: string = 'Mario Rossi'; --> codice vecchio, ora uso i signal
   paziente = input.required<Paziente>();
+  borderTop = input.required<boolean>();
+
+  setBorderTop(){
+    return this.borderTop() ? 'border-t-8' : 'border-l-8';
+  }
 
   setColoreDiStato() {
     switch (this.paziente().codiceColore) {

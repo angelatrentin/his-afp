@@ -1,8 +1,45 @@
+<input
+  [(ngModel)]="nomePaziente"
+  pInputText
+  type="text"
+>
+
+<p> Nome Paziente: {{nomePaziente () || 'none'}} </p>
+<p> Pazienti in Lista: {{filteredList().length}} </p>
+<p> {{healthStatus ()}}</p>
+<hr>
+
+@let srv = healthStatus()?.service;
+@let db = healthStatus()?.database;
+@let uptime = healthStatus()?.uptime;
+
+<ul>
+  <li>Service:
+    <p-tag
+      [severity]="srv == undefined ? 'danger' : 'success'"
+      value="{{ srv || 'KO' }}"
+    />
+  </li>
+  <li>Database:
+    <p-tag
+      [severity]="db === 'DISCONNECTED' ? 'danger' : 'success'"
+      value="{{ db || 'KO' }}"
+    />
+  </li>
+  <li>Uptime:
+    <p-tag
+      [severity]="uptime == undefined ? 'danger' : 'success'"
+      value="{{ uptime || 'KO' }}"
+    />
+  </li>
+</ul>
+
 <div
     class="flex flex-wrap flex-row gap-4 p-4"
 >
-    @for (pz of ListaPz(); track pz.braccialetto) {
-    <his-card-pz [paziente]="pz"/>
+    @for (pz of filteredList(); track pz.braccialetto) {
+    <his-card-pz [borderTop]="false" [paziente]="pz"/>
+    <p-button (onClick)="editNomePaziente(pz.nome)" label="Modifica nome paziente"></p-button>
     }   @empty {
         <h1> Nessun paziente in attesa </h1>
     }
