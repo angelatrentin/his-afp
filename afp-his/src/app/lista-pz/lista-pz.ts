@@ -1,4 +1,4 @@
-import { Component, computed, inject, model, signal } from '@angular/core';
+import { Component, computed, effect, inject, model, signal } from '@angular/core';
 import { CardPz} from '../card-pz/card-pz';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
@@ -23,14 +23,14 @@ export class ListaPz {
   nomePaziente = model <string>('');
   ListaPz = this.PatientManager.ListaPz;
 
-  filteredList= computed(()=> {
-    return this.ListaPz().filter((pz: Paziente) => 
-      pz.nome.toLowerCase().includes(this.nomePaziente().toLowerCase())
-    );
-  });
-
   editNomePaziente(nomePaziente: string) {
     this.nomePaziente.set(nomePaziente);
+    this.PatientManager.filterByName(nomePaziente);
   }
 
+  constructor() {
+    effect(() => {
+      this.PatientManager.filterByName(this.nomePaziente());
+    });
+  }
 }

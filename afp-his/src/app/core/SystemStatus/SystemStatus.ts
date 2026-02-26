@@ -10,7 +10,6 @@ import { APIResponse } from '../models/APIResponse.model';
 export class SystemStatus {
   #http = inject(HttpClient);
   #statoAPI = signal<HealthStatus>(healthStatusMock);
-
   statoAPI = this.#statoAPI.asReadonly();
 
   constructor() {

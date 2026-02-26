@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal, computed } from '@angular/core';
 import { Paziente, PazienteDTO } from './Pazienti.model';
 import { ListaPz } from '../../lista-pz/lista-pz';
 import { HttpClient } from '@angular/common/http';
@@ -10,7 +10,9 @@ import { APIResponse } from '../models/APIResponse.model';
 export class PatientManager {
   #http = inject(HttpClient);
   #listaPz = signal<Paziente[]>([]);
-  ListaPz = this.#listaPz.asReadonly();
+  #ListaPZFiltered = signal<Paziente[]>(this.#listaPz());
+  ListaPz=this.#ListaPZFiltered.asReadonly();
+
   constructor() {    
     this.fetchListaPz();
   }
@@ -37,7 +39,7 @@ export class PatientManager {
       eta: this.calcolaeta(Paziente.dataNascita),
       codiceColore: Paziente.coloreCode,
       note: Paziente.noteTriage,
-      patologia: Paziente.patologiaDescrizione,    
+      patologia: Paziente.patologiaCode,    
     };
   }
 
@@ -50,5 +52,13 @@ export class PatientManager {
         eta--;
     }
     return eta;
+  }
+
+  public filterByName(nome: string) {
+    const filtered = this.#listaPz().filter((paziente) => {
+      const fullName = `${paziente.nome} ${paziente.cognome}`.toLowerCase();
+      return fullName.includes(nome.toLowerCase());
+    });
+    this.#ListaPZFiltered.set(filtered); 
   }
 }

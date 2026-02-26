@@ -20,15 +20,15 @@ export class CardPz {
 
   setColoreDiStato() {
     switch (this.paziente().codiceColore) {
-      case 'rosso':
+      case 'ROSSO':
         return 'border-red-600';
-      case 'arancione':
+      case 'ARANCIONE':
         return 'border-orange-600';
-      case 'azzurro':
+      case 'AZZURRO':
         return 'border-blue-600';
-      case 'verde':
+      case 'VERDE':
         return 'border-green-600';
-      case 'bianco':
+      case 'BIANCO':
         return 'border-gray-600';
       default:
         return '';
