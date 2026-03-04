@@ -1,7 +1,7 @@
 import { Component, input} from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { Button } from "primeng/button";
-import { Paziente } from '../core/pazienti/Pazienti.model';
+import { Paziente } from '../../core/pazienti/Pazienti.model';
 
 @Component({
   selector: 'his-card-pz',

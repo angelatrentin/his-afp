@@ -1,6 +1,6 @@
 import { inject, Injectable, signal, computed } from '@angular/core';
 import { Paziente, PazienteDTO } from './Pazienti.model';
-import { ListaPz } from '../../lista-pz/lista-pz';
+import { ListaPz } from '../../pattern/lista-pz/lista-pz';
 import { HttpClient } from '@angular/common/http';
 import { APIResponse } from '../models/APIResponse.model';
 
