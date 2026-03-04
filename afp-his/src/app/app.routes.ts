@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { ListaPz } from './pattern/lista-pz/lista-pz';
+import { ListaPz } from './fetures/lista-pz/lista-pz';
 import { AccettazionePz } from './fetures/accettazione-pz/accettazione-pz';
 import { StatoServizi } from './fetures/stato-servizi/stato-servizi';
 import { Component } from '@angular/core';
@@ -17,6 +17,10 @@ export const routes: Routes = [
         component: AccettazionePz,
     },
     {
+        path: 'modifica-pz',
+        component: ModificaPz,
+    },
+        {
         path: 'modifica-pz:id',
         component: ModificaPz,
     },
@@ -33,10 +37,12 @@ export const routes: Routes = [
         pathMatch: 'full',
     },
 
+
     //3.rotta per qualsiasi altro caso
     {
         path: '**',
         redirectTo: 'lista-pz',
         pathMatch: 'full',
     }
+    
 ];
