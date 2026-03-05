@@ -10,23 +10,29 @@ export const routes: Routes = [
     //1.rotte popolate
     {
         path: 'lista-pz',
-        component: ListaPz,
+        //component: ListaPz,
+        loadComponent: () => import('./fetures/lista-pz/lista-pz').then(m => m.ListaPz),
     },
     {
         path: 'accettazione-pz',
-        component: AccettazionePz,
+        // component: AccettazionePz,
+        loadComponent: () => import('./fetures/accettazione-pz/accettazione-pz').then(m => m.AccettazionePz),
     },
     {
         path: 'modifica-pz',
-        component: ModificaPz,
+        // component: ModificaPz,
+        loadComponent: () => import('./fetures/modifica-pz/modifica-pz').then(m => m.ModificaPz),
+
     },
         {
-        path: 'modifica-pz:id',
-        component: ModificaPz,
+        path: 'modifica-pz:patientId',
+        // component: ModificaPz,
+        loadComponent: () => import('./fetures/modifica-pz/modifica-pz').then(m => m.ModificaPz),
     },
     {
         path: 'stato-servizi',
-        component: StatoServizi,
+        //component: StatoServizi,
+        loadComponent: () => import('./fetures/stato-servizi/stato-servizi').then(m => m.StatoServizi),
     },
 
 

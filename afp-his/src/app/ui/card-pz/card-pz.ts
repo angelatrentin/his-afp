@@ -1,7 +1,8 @@
-import { Component, input} from '@angular/core';
+import { Component, inject, input} from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { Button } from "primeng/button";
 import { Paziente } from '../../core/pazienti/Pazienti.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'his-card-pz',
@@ -13,6 +14,13 @@ export class CardPz {
   // nome: string = 'Mario Rossi'; --> codice vecchio, ora uso i signal
   paziente = input.required<Paziente>();
   borderTop = input.required<boolean>();
+  readonly #router= inject(Router);
+
+  public navigateToSchedaPaziente() {
+    this.#router.navigate([`/modifica-pz/`], {
+      queryParams:{patientId: this.paziente().id }
+    });
+  }
 
   setBorderTop(){
     return this.borderTop() ? 'border-t-8' : 'border-l-8';
