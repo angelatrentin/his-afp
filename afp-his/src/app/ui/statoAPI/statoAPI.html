@@ -2,28 +2,35 @@
 @let db = SystemStatus.statoAPI().database;
 @let uptime = SystemStatus.statoAPI().uptime;
 
-<ul>
-  <li>Service:
-    <p-tag
-      [severity]="srv == 'UP' ? 'success' : 'danger'"
-      value="{{ srv }}"
-    />
-  </li>
-  <li>Database:
-    <p-tag
-      [severity]="db === 'CONNECTED' ? 'success' : 'danger'"
-      value="{{ db }}"
-    />
-  </li>
-  <li>Uptime:
-    <p-tag
-      [severity]="uptime >0 ? 'success' : 'danger'"
-      value="{{ uptime }}"
-    />
-  </li>
-  <li>
-    <p-button (onClick)="SystemStatus.fetchStatoAPI()">
-    Refresh Status
-    </p-button>
-  </li>
-</ul>
+<div
+  class="justify-center w-full
+  flex flex-row items-center gap-3"
+>
+  Service:
+      <p-tag
+        [severity]="srv == 'UP' ? 'success' : 'danger'"
+        value="{{ srv }}"
+      />
+
+    Database:
+      <p-tag
+        [severity]="db === 'CONNECTED' ? 'success' : 'danger'"
+        value="{{ db }}"
+      />
+    
+    Uptime:
+      <p-tag
+        [severity]="uptime >0 ? 'success' : 'danger'"
+        value="{{ uptime }}"
+      />
+    
+</div>
+
+<div
+  class="justify-center w-full
+  flex flex-col items-center mt-4"
+>
+      <p-button class="flex-col" (onClick)="SystemStatus.fetchStatoAPI()">
+      Refresh Status
+      </p-button>
+</div>
