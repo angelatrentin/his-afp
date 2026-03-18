@@ -24,10 +24,10 @@ export const routes: Routes = [
         loadComponent: () => import('./fetures/modifica-pz/modifica-pz').then(m => m.ModificaPz),
 
     },
-        {
-        path: 'modifica-pz:patientId',
-        // component: ModificaPz,
-        loadComponent: () => import('./fetures/modifica-pz/modifica-pz').then(m => m.ModificaPz),
+    {
+    // /modifica-pz?id=2
+    path: 'modifica-pz/:patientId',
+    loadComponent: () => import('./fetures/modifica-pz/modifica-pz').then((m) => m.ModificaPz),
     },
     {
         path: 'stato-servizi',
