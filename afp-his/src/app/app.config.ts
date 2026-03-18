@@ -20,7 +20,7 @@ export const appConfig: ApplicationConfig = {
         }
       }
     }),
-    provideAppInitializer(() => inject(PatientManager).fetchPazienti()),
+    provideAppInitializer(() => inject(PatientManager).fetchListaPz()),
     provideAppInitializer(() => inject(GestioneRisorse).fetchRisorse()),
   ]
 };
