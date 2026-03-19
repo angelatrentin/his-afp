@@ -2,11 +2,31 @@
     <label for="nome">Nome: </label>
     <input 
         [formControl]="nome" 
+        [invalid]="nome.invalid && (nome.touched || nome.dirty)"
+        class="w-2xs"
         id="nome" 
         pInputText 
-        class="w-2xs"
-        type="text">
+        type="text"
+    >
+    @if (nome.invalid && (nome.touched || nome.dirty)) {
+        @if (nome.getError('required')) {
+            <p class="text-red-500">
+                Il campo "Nome" è obbligatorio
+            </p>
+        }
+        @if (nome.getError('minlength')) {
+            <p class="text-red-500">
+                Il campo "Nome" deve contenere almeno {{ nome.getError('minlength').requiredLength }} caratteri
+            </p>
+        }
+        @if (nome.getError('maxlength')) {
+            <p class="text-red-500">
+                Il campo "Nome" non può superare i {{ nome.getError('maxlength').requiredLength }} caratteri
+            </p>
+        }
+    }
 </div>
+<p>Error: {{nome.errors | json}}</p>
 <p>Modifica:
     @if (nome.dirty){
         <span class="text-green-500"> Modificato</span>
@@ -28,7 +48,14 @@
         <span class="text-red-500"> Non valida</span>
     }
 </p>
-<p>Pending: 
+<p>Form valida: 
+    @if (nome.invalid && (nome.touched || nome.dirty)) {
+        <span class="text-red-500">Non valida</span>
+    } @else {
+        <span class="text-green-500">Valida</span>
+    }
+</p>
+<p>Pending:
     @if (nome.pending) {
         <span class="text-green-500"> Pending</span>
     } @else {
