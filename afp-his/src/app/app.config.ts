@@ -7,7 +7,7 @@ import { routes } from './app.routes';
 import { PatientManager } from './core/pazienti/patient-manager';
 import { GestioneRisorse } from './core/risorse/gestione-risorse';
 
-export const appConfig: ApplicationConfig = {
+export const appConfig:ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes, withComponentInputBinding()),
