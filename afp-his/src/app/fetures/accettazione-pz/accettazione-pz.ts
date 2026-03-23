@@ -2,8 +2,9 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { GestioneRisorse } from '../../core/risorse/gestione-risorse';
 import { JsonPipe } from '@angular/common';
 import { InputText } from "primeng/inputtext";
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Button } from "primeng/button";
+import { Paziente } from '../../../../../his-afp/src/app/core/Pazienti/Pazienti.model';
 
 @Component({
   selector: 'his-accettazione-pz',
@@ -14,17 +15,31 @@ import { Button } from "primeng/button";
 })
 export class AccettazionePz {
   GestioneRisorse = inject(GestioneRisorse);
+  // paziente = new FormGroup ({
+  //   nome: new FormControl('', [Validators.required]),
+  //   cognome: new FormControl('', [Validators.required]),
+  // });
 
-  paziente = new FormGroup ({
-    nome: new FormControl('', [Validators.required]),
-    cognome: new FormControl('', [Validators.required]),
-    residenza: new FormGroup ({
-      via: new FormControl(),
-      civico: new FormControl(),
-    })
+  readonly #fb = inject(FormBuilder);
+
+  Paziente = this.#fb.group({
+    anagrafica: this.#fb.group({
+      nome: ['', [Validators.required]],
+      cognome: ['', [Validators.required]],
+      dataNascita: ['', [Validators.required]],
+      codiceFiscale: ['', [Validators.required]],
+      sesso: ['', [Validators.required]],
+    }),
+    sanitaria: this.#fb.group({
+      patologia: ['', [Validators.required]],
+      codiceColore: ['', [Validators.required]],
+      modArrivo: ['', [Validators.required]],
+      noteTriage: ['', [Validators.required]],
+    }),
   });
+
   checkFormControl(control: string) {
-    const fc = this.paziente.get(control);
+    const fc = this.Paziente.get(control);
     return fc?.invalid && (fc.touched || fc.dirty);
 
     // si può usare anche scritto così
@@ -35,7 +50,7 @@ export class AccettazionePz {
   }
 
   checkFormControlError(control: string, error: string) {
-    const fc = this.paziente.get(control);
+    const fc = this.Paziente.get(control);
 
     if(fc && fc.hasError(error)) {
       return fc.getError(error);
@@ -45,10 +60,10 @@ export class AccettazionePz {
   }
 
   onSubmit() {
-    if (this.paziente.valid) {
-      console.log(this.paziente.value);
+    if (this.Paziente.valid) {
+      console.log(this.Paziente.value);
     }else{
-      this.paziente.markAllAsTouched();
+      this.Paziente.markAllAsTouched();
     }
   }
 }

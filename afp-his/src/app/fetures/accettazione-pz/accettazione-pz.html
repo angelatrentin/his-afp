@@ -1,68 +1,74 @@
-<form (submit)="onSubmit()" [formGroup]="paziente">
-    <div class="flex flex-col p-4">
-    <label for="nome">Nome: </label>
-    <input 
-        formControlName = "nome" 
-        [invalid]="checkFormControl('nome')"
-        class="w-2xs"
-        id="nome" 
-        pInputText 
-        type="text"
-    >
-    @if (checkFormControl('nome')) {
-        @if (checkFormControlError('nome', 'required')) {
-            <p class="text-red-500">
-                Il campo "Nome" è obbligatorio
-            </p>
-        }
-        @if (checkFormControlError('nome', 'minlength')) {
-            <p class="text-red-500">
-                Il campo "Nome" deve contenere almeno {{checkFormControlError('nome', 'minlength').requiredLength }} caratteri
-            </p>
-        }
-        @if (checkFormControlError('nome', 'maxlength')) {
-            <p class="text-red-500">
-                Il campo "Nome" non può superare i {{ checkFormControlError('nome', 'maxlength').requiredLength }} caratteri
-            </p>
-        }   
-    }
-    </div>
+<form (submit)="onSubmit()" [formGroup]="Paziente">
+    <fieldset formGroupName="anagrafica">
 
-    <div class="flex flex-col p-4">
-        <label for="cognome">Cognome: </label>
+        <div class="flex flex-col p-4">
+        <label for="nome">Nome: </label>
         <input 
-            formControlName = "cognome" 
-            [invalid]="checkFormControl('cognome')"
+            formControlName = "nome" 
+            [invalid]="checkFormControl('anagrafica.nome')"
             class="w-2xs"
-            id="cognome" 
+            id="nome" 
             pInputText 
             type="text"
         >
-        @if (checkFormControl('cognome')) {
-            @if (checkFormControlError('cognome', 'required')) {
+        @if (checkFormControl('anagrafica.nome')) {
+            @if (checkFormControlError('anagrafica.nome', 'required')) {
                 <p class="text-red-500">
-                    Il campo "Cognome" è obbligatorio
+                    Il campo "Nome" è obbligatorio
                 </p>
             }
-            @if (checkFormControlError('cognome', 'minlength')) {
+            @if (checkFormControlError('anagrafica.nome', 'minlength')) {
                 <p class="text-red-500">
-                    Il campo "Cognome" deve contenere almeno {{checkFormControlError('cognome', 'minlength').requiredLength }} caratteri
+                    Il campo "Nome" deve contenere almeno {{checkFormControlError('nome', 'minlength').requiredLength }} caratteri
                 </p>
             }
-            @if (checkFormControlError('cognome', 'maxlength')) {
+            @if (checkFormControlError('anagrafica.nome', 'maxlength')) {
                 <p class="text-red-500">
-                    Il campo "Cognome" non può superare i {{ checkFormControlError('cognome', 'maxlength').requiredLength }} caratteri
+                    Il campo "Nome" non può superare i {{ checkFormControlError('nome', 'maxlength').requiredLength }} caratteri
                 </p>
-            }
+            }   
         }
-    </div>
+        </div>
+
+        <div class="flex flex-col p-4">
+            <label for="cognome">Cognome: </label>
+            <input 
+                formControlName = "cognome" 
+                [invalid]="checkFormControl('anagrafica.cognome')"
+                class="w-2xs"
+                id="cognome" 
+                pInputText 
+                type="text"
+            >
+            @if (checkFormControl('anagrafica.cognome')) {
+                @if (checkFormControlError('anagrafica.cognome', 'required')) {
+                    <p class="text-red-500">
+                        Il campo "Cognome" è obbligatorio
+                    </p>
+                }
+                @if (checkFormControlError('anagrafica.cognome', 'minlength')) {
+                    <p class="text-red-500">
+                        Il campo "Cognome" deve contenere almeno {{checkFormControlError('cognome', 'minlength').requiredLength }} caratteri
+                    </p>
+                }
+                @if (checkFormControlError('anagrafica.cognome', 'maxlength')) {
+                    <p class="text-red-500">
+                        Il campo "Cognome" non può superare i {{ checkFormControlError('cognome', 'maxlength').requiredLength }} caratteri
+                    </p>
+                }
+            }
+        </div>
+    </fieldset>
+
+
+    
 
     <p-button 
     type="submit"
     label="Invia" 
     />
     <p-button 
-    (onClick) = "paziente.reset({nome: '', cognome: ''})"
+    (onClick) = "Paziente.reset()"
     label="Reset" 
     severity="warn"
     variant="outlined"
@@ -70,43 +76,43 @@
 
 </form>
 
-<p>Error: {{paziente.errors | json}}</p>
+<p>Error: {{Paziente.errors | json}}</p>
 <p>Modifica:
-    @if (paziente.dirty){
+    @if (Paziente.dirty){
         <span class="text-green-500"> Modificato</span>
     }@else{
         <span class="text-red-500"> Non modificato</span>
     }
 </p>
 <p>Toccata: 
-    @if (paziente.touched) {
+    @if (Paziente.touched) {
         <span class="text-green-500"> Toccata</span>
     } @else {
         <span class="text-red-500"> Non toccata</span>
     }
 </p>
 <p>Valida:
-    @if (paziente.valid) {
+    @if (Paziente.valid) {
         <span class="text-green-500"> Valida</span>
     } @else {
         <span class="text-red-500"> Non valida</span>
     }
 </p>
 <p>Form valida: 
-    @if (paziente.invalid && (paziente.touched || paziente.dirty)) {
+    @if (Paziente.invalid && (Paziente.touched || Paziente.dirty)) {
         <span class="text-red-500">Non valida</span>
     } @else {
         <span class="text-green-500">Valida</span>
     }
 </p>
 <p>Pending:
-    @if (paziente.pending) {
+    @if (Paziente.pending) {
         <span class="text-green-500"> Pending</span>
     } @else {
         <span class="text-red-500"> Non pending</span>
     }
 </p>
 
-<p>Valore Form Paziente: {{paziente.value |json}}</p>
-<p>Error: {{paziente.errors |json}}</p>
+<p>Valore Form Paziente: {{Paziente.value |json}}</p>
+<p>Error: {{Paziente.errors |json}}</p>
 
