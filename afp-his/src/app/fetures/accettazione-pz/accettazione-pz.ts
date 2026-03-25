@@ -5,10 +5,13 @@ import { InputText } from "primeng/inputtext";
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Button } from "primeng/button";
 import { Paziente } from '../../../../../his-afp/src/app/core/Pazienti/Pazienti.model';
-
+import { MessageModule } from 'primeng/message';
+import { DatePickerModule } from 'primeng/datepicker';
+import { InputMaskModule } from 'primeng/inputmask';
+import { SelectModule } from 'primeng/select';
 @Component({
   selector: 'his-accettazione-pz',
-  imports: [JsonPipe, InputText, ReactiveFormsModule, Button],
+  imports: [JsonPipe, InputText, ReactiveFormsModule, Button, MessageModule, DatePickerModule, InputMaskModule, SelectModule],
   templateUrl: './accettazione-pz.html',
   styleUrl: './accettazione-pz.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -20,6 +23,18 @@ export class AccettazionePz {
   //   cognome: new FormControl('', [Validators.required]),
   // });
 
+  readonly maxDate=new Date();
+  readonly sexOptions=[
+    {
+      code: 'M',
+      desc: 'Maschio'
+    },
+    {
+      code: 'F',
+      desc: 'Femmina'
+    }
+  ];
+
   readonly #fb = inject(FormBuilder);
 
   Paziente = this.#fb.group({
@@ -27,7 +42,7 @@ export class AccettazionePz {
       nome: ['', [Validators.required]],
       cognome: ['', [Validators.required]],
       dataNascita: ['', [Validators.required]],
-      codiceFiscale: ['', [Validators.required]],
+      codiceFiscale: ['', [Validators.required, Validators.pattern("[A-Z]{6}\\d{2}[A-Z]\\d{2}[A-Z]\\d{3}[A-Z]")]],
       sesso: ['', [Validators.required]],
     }),
     sanitaria: this.#fb.group({

@@ -13,19 +13,13 @@
         >
         @if (checkFormControl('anagrafica.nome')) {
             @if (checkFormControlError('anagrafica.nome', 'required')) {
-                <p class="text-red-500">
-                    Il campo "Nome" è obbligatorio
-                </p>
+                <p-message severity="error" variant="simple">Il campo "Nome" è obbligatorio</p-message>
             }
             @if (checkFormControlError('anagrafica.nome', 'minlength')) {
-                <p class="text-red-500">
-                    Il campo "Nome" deve contenere almeno {{checkFormControlError('nome', 'minlength').requiredLength }} caratteri
-                </p>
+                <p-message severity="error" variant="simple">Il campo "Nome" deve contenere almeno {{checkFormControlError('anagrafica.nome', 'minlength').requiredLength }} caratteri</p-message>
             }
             @if (checkFormControlError('anagrafica.nome', 'maxlength')) {
-                <p class="text-red-500">
-                    Il campo "Nome" non può superare i {{ checkFormControlError('nome', 'maxlength').requiredLength }} caratteri
-                </p>
+                <p-message severity="error" variant="simple"> Il campo "Nome" non può superare i {{ checkFormControlError('anagrafica.nome', 'maxlength').requiredLength }} caratteri</p-message>
             }   
         }
         </div>
@@ -42,25 +36,166 @@
             >
             @if (checkFormControl('anagrafica.cognome')) {
                 @if (checkFormControlError('anagrafica.cognome', 'required')) {
-                    <p class="text-red-500">
-                        Il campo "Cognome" è obbligatorio
-                    </p>
+                    <p-message severity="error" variant="simple">Il campo "Cognome" è obbligatorio</p-message>
                 }
                 @if (checkFormControlError('anagrafica.cognome', 'minlength')) {
-                    <p class="text-red-500">
-                        Il campo "Cognome" deve contenere almeno {{checkFormControlError('cognome', 'minlength').requiredLength }} caratteri
-                    </p>
+                    <p-message severity="error" variant="simple">Il campo "Cognome" deve contenere almeno {{checkFormControlError('anagrafica.cognome', 'minlength').requiredLength }} caratteri</p-message>
                 }
                 @if (checkFormControlError('anagrafica.cognome', 'maxlength')) {
-                    <p class="text-red-500">
-                        Il campo "Cognome" non può superare i {{ checkFormControlError('cognome', 'maxlength').requiredLength }} caratteri
-                    </p>
+                    <p-message severity="error" variant="simple">Il campo "Cognome" deve contenere almeno {{checkFormControlError('anagrafica.cognome', 'maxlength').requiredLength }} caratteri</p-message>
+                }
+            }
+        </div>
+
+        <div class="flex flex-col p-4">
+            <label for="dataNascita">Data Nascita: </label>
+            <p-date-picker 
+            [invalid]="checkFormControl('anagrafica.dataNascita')"
+            [maxDate]="maxDate"
+            class="w-2xs"
+            dateFormat="dd/mm/yy"
+            placeholder="gg/mm/aaaa"
+            formControlName="dataNascita"
+            id="dataNascita"
+            />
+
+            @if (checkFormControl('anagrafica.dataNascita')) {
+                @if (checkFormControlError('anagrafica.dataNascita', 'required')) {
+                    <p-message severity="error" variant="simple">Il campo "Data di Nascita" è obbligatorio</p-message>
+                }
+            }
+        </div>
+
+        <div class="flex flex-col p-4">
+            <label for="codiceFiscale">Codice Fiscale: </label>
+            <input 
+                formControlName = "codiceFiscale" 
+                [invalid]="checkFormControl('anagrafica.codiceFiscale')"
+                class="w-2xs"
+                id="codiceFiscale" 
+                pInputText 
+                type="text"
+            >
+            @if (checkFormControl('anagrafica.codiceFiscale')) {
+                @if (checkFormControlError('anagrafica.codiceFiscale', 'required')) {
+                    <p-message severity="error" variant="simple">Il campo "Codice Fiscale" è obbligatorio</p-message>
+                }
+                @if (checkFormControlError('anagrafica.codiceFiscale', 'pattern')) {
+                    <p-message severity="error" variant="simple">Il campo "Codice Fiscale" non rispetta la struttura corretta</p-message>
+                }
+                
+            }
+        </div>
+
+        <div class="flex flex-col p-4">
+            <label for="sesso">Sesso: </label>
+            <p-select
+                id="sesso"
+                [invalid]="checkFormControl('anagrafica.sesso')"
+                formControlName="sesso"
+                class="w-2xs"
+                [options]="sexOptions"
+                optionLabel="desc"
+                optionValue="code"
+            />
+            @if (checkFormControl('anagrafica.sesso')) {
+                @if (checkFormControlError('anagrafica.sesso', 'required')) {
+                    <p-message severity="error" variant="simple">Il campo "Sesso" è obbligatorio</p-message>
                 }
             }
         </div>
     </fieldset>
 
+    <fieldset formGroupName="sanitaria">
+        <div class="flex flex-col p-4">
+            <label for="patologia">Patologia: </label>
+            <p-select
+                id="patologia"
+                [invalid]="checkFormControl('sanitaria.patologia')"
+                formControlName="patologia"
+                class="w-2xs"
+                [options]="GestioneRisorse.Pathologies()"
+                [filter]="true"
+                [filterFields]="['code', 'description']"
+                optionValue="code"
+            >
 
+            <ng-template #item let-pathology>
+                {{pathology.code}} - {{pathology.description}}
+            </ng-template>
+            <ng-template #selectedItem let-pathology>
+                {{pathology.code}} - {{pathology.description}}
+            </ng-template>
+
+            </p-select>
+
+            @if (checkFormControl('sanitaria.patologia')) {
+                @if (checkFormControlError('sanitaria.patologia', 'required')) {
+                    <p-message severity="error" variant="simple">Il campo "Patologia" è obbligatorio</p-message>
+                }
+            }
+        </div>
+
+        <div class="flex flex-col p-4">
+            <label for="modArrivo">Modalità di arrivo: </label>
+            <p-select
+                id="modArrivo"
+                [invalid]="checkFormControl('sanitaria.modArrivo')"
+                formControlName="modArrivo"
+                class="w-2xs"
+                [options]="GestioneRisorse.ArrivalModes()"
+                [filter]="true"
+                [filterFields]="['code', 'description']"
+                optionValue="code"
+            >
+
+            <ng-template #item let-modArrivo>
+                {{modArrivo.code}} - {{modArrivo.description}}
+            </ng-template>
+            <ng-template #selectedItem let-modArrivo>
+                {{modArrivo.code}} - {{modArrivo.description}}
+            </ng-template>
+
+            </p-select>
+
+            @if (checkFormControl('sanitaria.modArrivo')) {
+                @if (checkFormControlError('sanitaria.modArrivo', 'required')) {
+                    <p-message severity="error" variant="simple">Il campo "Modalità di Arrivo" è obbligatorio</p-message>
+                }
+            }
+        </div>
+
+        <div class="flex flex-col p-4">
+            <label for="codiceColore">Codice Colore: </label>
+            <p-select
+                id="codiceColore"
+                [invalid]="checkFormControl('sanitaria.codiceColore')"
+                formControlName="codiceColore"
+                class="w-2xs"
+                [options]="GestioneRisorse.TriageColor()"
+                optionValue="code"
+            >
+            <ng-template #item let-color>
+                <div class="flex flex-row items-center gap-2">
+                    <span
+                        class="inline-block size-5 h-5 rounded-md"
+                        [style.background-color]="color.hexValue"
+                    ></span>
+                    {{color.displayName}}
+                </div>
+            </ng-template>
+            <ng-template #selectedItem let-color>
+                {{color.displayName}}
+            </ng-template>
+            </p-select>
+
+            @if (checkFormControl('sanitaria.codiceColore')) {
+                @if (checkFormControlError('sanitaria.codiceColore', 'required')) {
+                    <p-message severity="error" variant="simple">Il campo "Codice colore" è obbligatorio</p-message>
+                }
+            }
+        </div>
+    </fieldset>
     
 
     <p-button 
