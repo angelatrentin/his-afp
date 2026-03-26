@@ -9,9 +9,11 @@ import { MessageModule } from 'primeng/message';
 import { DatePickerModule } from 'primeng/datepicker';
 import { InputMaskModule } from 'primeng/inputmask';
 import { SelectModule } from 'primeng/select';
+import { TextareaModule } from 'primeng/textarea';
+import { FieldsetModule } from 'primeng/fieldset';
 @Component({
   selector: 'his-accettazione-pz',
-  imports: [JsonPipe, InputText, ReactiveFormsModule, Button, MessageModule, DatePickerModule, InputMaskModule, SelectModule],
+  imports: [JsonPipe, InputText, ReactiveFormsModule, Button, MessageModule, DatePickerModule, InputMaskModule, SelectModule, TextareaModule, FieldsetModule],
   templateUrl: './accettazione-pz.html',
   styleUrl: './accettazione-pz.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -49,7 +51,7 @@ export class AccettazionePz {
       patologia: ['', [Validators.required]],
       codiceColore: ['', [Validators.required]],
       modArrivo: ['', [Validators.required]],
-      noteTriage: ['', [Validators.required]],
+      noteTriage: ['', [Validators.required, Validators.maxLength(500)]],
     }),
   });
 

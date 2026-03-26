@@ -1,6 +1,6 @@
 <form (submit)="onSubmit()" [formGroup]="Paziente">
-    <fieldset formGroupName="anagrafica">
-
+    <div class="flex flex-row flex-wrap gap-8">
+        <p-fieldset formGroupName="anagrafica" legend="Dati Anagrafici">
         <div class="flex flex-col p-4">
         <label for="nome">Nome: </label>
         <input 
@@ -23,7 +23,7 @@
             }   
         }
         </div>
-
+        
         <div class="flex flex-col p-4">
             <label for="cognome">Cognome: </label>
             <input 
@@ -104,110 +104,136 @@
                 }
             }
         </div>
-    </fieldset>
+        </p-fieldset>
 
-    <fieldset formGroupName="sanitaria">
-        <div class="flex flex-col p-4">
-            <label for="patologia">Patologia: </label>
-            <p-select
-                id="patologia"
-                [invalid]="checkFormControl('sanitaria.patologia')"
-                formControlName="patologia"
-                class="w-2xs"
-                [options]="GestioneRisorse.Pathologies()"
-                [filter]="true"
-                [filterFields]="['code', 'description']"
-                optionValue="code"
-            >
+        <p-fieldset formGroupName="sanitaria" legend="Dati Sanitari">
+            <div class="flex flex-col p-4">
+                <label for="patologia">Patologia: </label>
+                <p-select
+                    id="patologia"
+                    [invalid]="checkFormControl('sanitaria.patologia')"
+                    formControlName="patologia"
+                    class="w-2xs"
+                    [options]="GestioneRisorse.Pathologies()"
+                    [filter]="true"
+                    [filterFields]="['code', 'description']"
+                    optionValue="code"
+                >
 
-            <ng-template #item let-pathology>
-                {{pathology.code}} - {{pathology.description}}
-            </ng-template>
-            <ng-template #selectedItem let-pathology>
-                {{pathology.code}} - {{pathology.description}}
-            </ng-template>
+                <ng-template #item let-pathology>
+                    {{pathology.code}} - {{pathology.description}}
+                </ng-template>
+                <ng-template #selectedItem let-pathology>
+                    {{pathology.code}} - {{pathology.description}}
+                </ng-template>
 
-            </p-select>
+                </p-select>
 
-            @if (checkFormControl('sanitaria.patologia')) {
-                @if (checkFormControlError('sanitaria.patologia', 'required')) {
-                    <p-message severity="error" variant="simple">Il campo "Patologia" è obbligatorio</p-message>
+                @if (checkFormControl('sanitaria.patologia')) {
+                    @if (checkFormControlError('sanitaria.patologia', 'required')) {
+                        <p-message severity="error" variant="simple">Il campo "Patologia" è obbligatorio</p-message>
+                    }
                 }
-            }
-        </div>
+            </div>
 
-        <div class="flex flex-col p-4">
-            <label for="modArrivo">Modalità di arrivo: </label>
-            <p-select
-                id="modArrivo"
-                [invalid]="checkFormControl('sanitaria.modArrivo')"
-                formControlName="modArrivo"
-                class="w-2xs"
-                [options]="GestioneRisorse.ArrivalModes()"
-                [filter]="true"
-                [filterFields]="['code', 'description']"
-                optionValue="code"
-            >
+            <div class="flex flex-col p-4">
+                <label for="modArrivo">Modalità di arrivo: </label>
+                <p-select
+                    id="modArrivo"
+                    [invalid]="checkFormControl('sanitaria.modArrivo')"
+                    formControlName="modArrivo"
+                    class="w-2xs"
+                    [options]="GestioneRisorse.ArrivalModes()"
+                    [filter]="true"
+                    [filterFields]="['code', 'description']"
+                    optionValue="code"
+                >
 
-            <ng-template #item let-modArrivo>
-                {{modArrivo.code}} - {{modArrivo.description}}
-            </ng-template>
-            <ng-template #selectedItem let-modArrivo>
-                {{modArrivo.code}} - {{modArrivo.description}}
-            </ng-template>
+                <ng-template #item let-modArrivo>
+                    {{modArrivo.code}} - {{modArrivo.description}}
+                </ng-template>
+                <ng-template #selectedItem let-modArrivo>
+                    {{modArrivo.code}} - {{modArrivo.description}}
+                </ng-template>
 
-            </p-select>
+                </p-select>
 
-            @if (checkFormControl('sanitaria.modArrivo')) {
-                @if (checkFormControlError('sanitaria.modArrivo', 'required')) {
-                    <p-message severity="error" variant="simple">Il campo "Modalità di Arrivo" è obbligatorio</p-message>
+                @if (checkFormControl('sanitaria.modArrivo')) {
+                    @if (checkFormControlError('sanitaria.modArrivo', 'required')) {
+                        <p-message severity="error" variant="simple">Il campo "Modalità di Arrivo" è obbligatorio</p-message>
+                    }
                 }
-            }
-        </div>
+            </div>
 
-        <div class="flex flex-col p-4">
-            <label for="codiceColore">Codice Colore: </label>
-            <p-select
-                id="codiceColore"
-                [invalid]="checkFormControl('sanitaria.codiceColore')"
-                formControlName="codiceColore"
-                class="w-2xs"
-                [options]="GestioneRisorse.TriageColor()"
-                optionValue="code"
-            >
-            <ng-template #item let-color>
-                <div class="flex flex-row items-center gap-2">
-                    <span
-                        class="inline-block size-5 h-5 rounded-md"
-                        [style.background-color]="color.hexValue"
-                    ></span>
+            <div class="flex flex-col p-4">
+                <label for="codiceColore">Codice Colore: </label>
+                <p-select
+                    id="codiceColore"
+                    [invalid]="checkFormControl('sanitaria.codiceColore')"
+                    formControlName="codiceColore"
+                    class="w-2xs"
+                    [options]="GestioneRisorse.TriageColor()"
+                    optionValue="code"
+                >
+                <ng-template #item let-color>
+                    <div class="flex flex-row items-center gap-2">
+                        <span
+                            class="inline-block size-5 h-5 rounded-md"
+                            [style.background-color]="color.hexValue"
+                        ></span>
+                        {{color.displayName}}
+                    </div>
+                </ng-template>
+                <ng-template #selectedItem let-color>
                     {{color.displayName}}
-                </div>
-            </ng-template>
-            <ng-template #selectedItem let-color>
-                {{color.displayName}}
-            </ng-template>
-            </p-select>
+                </ng-template>
+                </p-select>
 
-            @if (checkFormControl('sanitaria.codiceColore')) {
-                @if (checkFormControlError('sanitaria.codiceColore', 'required')) {
-                    <p-message severity="error" variant="simple">Il campo "Codice colore" è obbligatorio</p-message>
+                @if (checkFormControl('sanitaria.codiceColore')) {
+                    @if (checkFormControlError('sanitaria.codiceColore', 'required')) {
+                        <p-message severity="error" variant="simple">Il campo "Codice colore" è obbligatorio</p-message>
+                    }
                 }
-            }
-        </div>
-    </fieldset>
-    
+            </div>
 
-    <p-button 
-    type="submit"
-    label="Invia" 
-    />
-    <p-button 
-    (onClick) = "Paziente.reset()"
-    label="Reset" 
-    severity="warn"
-    variant="outlined"
-    />
+            <div class="flex flex-col p-4">
+                <label for="noteTriage">Note Triage: </label>
+                <textarea
+                    formControlName="noteTriage"
+                    [invalid]="checkFormControl('sanitaria.noteTriage')"
+                    id="noteTriage"
+                    class="w-2xs"
+                    pTextarea
+                    cols="30"
+                    rows="5"
+                >
+                    
+                </textarea>
+                @if (checkFormControl('sanitaria.noteTriage')) {
+                    @if (checkFormControlError('sanitaria.noteTriage', 'required')) {
+                        <p-message severity="error" variant="simple">Il campo "Note Triage" è obbligatorio</p-message>
+                    }
+                    @if (checkFormControlError('sanitaria.noteTriage', 'maxlength')) {
+                        <p-message severity="error" variant="simple">Il campo "Note Triage" può contenere al massimo {{checkFormControlError('sanitaria.noteTriage', 'maxlength').requiredLength}} caratteri</p-message>
+                    }
+                }
+            </div>
+        </p-fieldset>
+    </div>
+
+    <div class="flex flex-row gap-4 pt-3">
+        <p-button 
+        type="submit"
+        label="Invia" 
+        />
+        <p-button 
+        (onClick) = "Paziente.reset()"
+        label="Reset" 
+        severity="warn"
+        variant="outlined"
+        />
+    </div>
+    
 
 </form>
 
