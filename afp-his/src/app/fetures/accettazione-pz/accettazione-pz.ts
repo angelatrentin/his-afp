@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { GestioneRisorse } from '../../core/risorse/gestione-risorse';
 import { JsonPipe } from '@angular/common';
 import { InputText } from "primeng/inputtext";
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Button } from "primeng/button";
 import { Paziente } from '../../../../../his-afp/src/app/core/Pazienti/Pazienti.model';
 import { MessageModule } from 'primeng/message';
@@ -11,6 +11,8 @@ import { InputMaskModule } from 'primeng/inputmask';
 import { SelectModule } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
 import { FieldsetModule } from 'primeng/fieldset';
+import { PatientManager } from '../../core/pazienti/patient-manager';
+import { PatientAdmission } from '../../core/pazienti/Pazienti.model';
 @Component({
   selector: 'his-accettazione-pz',
   imports: [JsonPipe, InputText, ReactiveFormsModule, Button, MessageModule, DatePickerModule, InputMaskModule, SelectModule, TextareaModule, FieldsetModule],
@@ -20,10 +22,7 @@ import { FieldsetModule } from 'primeng/fieldset';
 })
 export class AccettazionePz {
   GestioneRisorse = inject(GestioneRisorse);
-  // paziente = new FormGroup ({
-  //   nome: new FormControl('', [Validators.required]),
-  //   cognome: new FormControl('', [Validators.required]),
-  // });
+  PatientManager = inject(PatientManager);
 
   readonly maxDate=new Date();
   readonly sexOptions=[
@@ -79,7 +78,10 @@ export class AccettazionePz {
   onSubmit() {
     if (this.Paziente.valid) {
       console.log(this.Paziente.value);
-    }else{
+      this.PatientManager.admitPatient(
+        this.Paziente.value as PatientAdmission
+      );
+    } else {
       this.Paziente.markAllAsTouched();
     }
   }
