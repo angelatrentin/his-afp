@@ -31,6 +31,19 @@ export class PatientManager {
     })
   }
 
+  public updatePatientInfo(pzId:number, residenza: Pick<PatientAdmission, 'residenza'>) {
+    this.#http.patch<APIResponse<PatientAdmissionRes>> (
+      '${environment.apiUrl}/patients/${pzId}', residenza)
+      .subscribe({
+        next: () => {
+          this.#router.navigate(['/lista-pz']);
+        },
+        error: (err) => {
+          console.error( "errore durante l'aggiornamento delle informazioni del paziente:", err);
+        },
+      });
+  }
+
   public fetchListaPz() {
     this.#http.get<APIResponse<PazienteDTO[]>>(`${environment.apiUrl}/admissions`).subscribe({
       next: (res) => {

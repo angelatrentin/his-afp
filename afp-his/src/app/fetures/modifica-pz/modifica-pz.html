@@ -304,6 +304,9 @@
                 @if (checkFormControlError('residenza.provincia', 'required')) {
                     <p-message severity="error" variant="simple">Il campo "Provincia" è obbligatorio</p-message>
                 } 
+                @if (checkFormControlError('residenza.provincia', 'maxlength')) {
+                <p-message severity="error" variant="simple"> Il campo "Provincia" non può superare i {{ checkFormControlError('residenza.provincia', 'maxlength').requiredLength }} caratteri</p-message>
+                } 
             }
             </div>
         </p-fieldset>

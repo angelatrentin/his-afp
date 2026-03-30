@@ -12,6 +12,8 @@ import { DatePicker } from "primeng/datepicker";
 import { Select } from "primeng/select";
 import { InputText } from "primeng/inputtext";
 import { Textarea } from 'primeng/textarea';
+import { PatientManager } from '../../core/pazienti/patient-manager';
+import { PatientAdmission } from '../../../../../his-afp/src/app/core/Pazienti/Pazienti.model';
 
 @Component({
   selector: 'his-modifica-pz',
@@ -22,6 +24,7 @@ import { Textarea } from 'primeng/textarea';
 })
 export class ModificaPz {
   GestioneRisorse = inject(GestioneRisorse);
+  PatientManager = inject(PatientManager)
   patientId = input<string>();
   patientReq = httpResource<APIResponse<PazienteDTO>>(
     () => `http://localhost:3000/admissions/${this.patientId()}`,
@@ -57,7 +60,7 @@ export class ModificaPz {
       via: ['', [Validators.required]],
       civico: ['', [Validators.required]],
       comune: ['', [Validators.required]],
-      provincia: ['', [Validators.required]],
+      provincia: ['', [Validators.required, Validators.maxLength(5)]],
     }),
   });
 
@@ -121,6 +124,7 @@ export class ModificaPz {
         // this.PatientManager.admitPatient(
         //   this.Paziente.value as PatientAdmission
         // );
+        this.PatientManager.updatePatientInfo(Number(this.patientId()) || -1, this.Paziente.value.residenza as Pick<PatientAdmission, 'residenza'>,);
       } else {
         this.Paziente.markAllAsTouched();
       }
