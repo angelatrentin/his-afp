@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy, Component, effect, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, input, untracked } from '@angular/core';
 import { httpResource } from '@angular/common/http';
 import { APIResponse } from '../../core/models/APIResponse.model';
-import { formatDate, JsonPipe } from '@angular/common';
+import { CommonModule, formatDate, JsonPipe } from '@angular/common';
 import { Button } from 'primeng/button';
-import { PazienteDTO } from '../../core/pazienti/Pazienti.model';
+import { PazienteDTO, Paziente } from '../../core/pazienti/Pazienti.model';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { GestioneRisorse } from '../../core/risorse/gestione-risorse';
 import { FieldsetModule } from "primeng/fieldset";
@@ -39,7 +39,6 @@ export class ModificaPz {
     }
   ];
   readonly #fb = inject(FormBuilder);
-
   Paziente = this.#fb.group({
     anagrafica: this.#fb.group({
       nome: ['', [Validators.required]],
@@ -54,35 +53,49 @@ export class ModificaPz {
       modArrivo: ['', [Validators.required]],
       noteTriage: ['', [Validators.required, Validators.maxLength(500)]],
     }),
+    residenza: this.#fb.group({
+      via: ['', [Validators.required]],
+      civico: ['', [Validators.required]],
+      comune: ['', [Validators.required]],
+      provincia: ['', [Validators.required]],
+    }),
   });
 
   
   constructor() {
     effect(() => {
-      const pzVal = this.patientReq.value();
       if (this.patientId() === undefined) {
         console.warn(
           'Patient ID is undefined. Please provide a valid patient ID in the route parameters.',
         );
       }
-      if (pzVal?.data){
-        const data = pzVal.data;
-        this.Paziente.patchValue({
-          anagrafica: {
-            nome: data.nome,
-            cognome: data.cognome,
-            dataNascita: formatDate(data.dataNascita, 'dd/MM/yyyy', 'en'),
-            codiceFiscale: data.codiceFiscale,
-            sesso: data.sex,
-          },
-          sanitaria: {
+      if(this.patientReq.hasValue()){
+         const data = this.patientReq.value().data;
+         untracked(()=>{
+            this.Paziente.patchValue({
+              anagrafica: {
+                nome: data.nome,
+                cognome: data.cognome,
+                dataNascita: formatDate(data.dataNascita, 'dd/MM/yyyy', 'en'),
+                codiceFiscale: data.codiceFiscale,
+                sesso: data.sex,
+              },
+              sanitaria: {
             patologia: data.patologiaCode,
             modArrivo: data.modalitaArrivoCode,
             noteTriage: data.noteTriage,
             codiceColore: data.coloreCode,
-          }
+            },
+              residenza: {
+                via: data.indirizzoVia,
+                civico: data.indirizzoCivico,
+                comune: data.comune,
+                provincia: data.provincia,
+            },
+          });
+          this.Paziente.get('anagrafica')?.disable();
+          this.Paziente.get('sanitaria')?.disable();
         });
-
       }
     });
   }
