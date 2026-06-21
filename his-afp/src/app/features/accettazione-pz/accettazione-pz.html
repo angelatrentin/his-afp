@@ -92,7 +92,11 @@
         />
         @if (paziente.get('anagrafica.codiceFiscale')?.pending) {
           <p-message severity="warn" variant="simple">
+<<<<<<< HEAD
             Controllo codice fiscale in corso, attendere prego...
+=======
+            Controllo del codice fiscale in corso...
+>>>>>>> upstream/uf15-2026/asyncValidator
           </p-message>
         }
         @if (checkFormControl('anagrafica.codiceFiscale')) {
@@ -106,9 +110,15 @@
               Il campo 'Codice Fiscale' non rispetta la struttura corretta.
             </p-message>
           }
+<<<<<<< HEAD
           @if (checkFormControlError('anagrafica.codiceFiscale', 'cfExist')) {
             <p-message severity="error" variant="simple">
               Il Codice Fiscale inserito è già presente nel sistema.
+=======
+          @if (checkFormControlError('anagrafica.codiceFiscale', 'cfEsistente')) {
+            <p-message severity="error" variant="simple">
+              Attenzione: questo Codice Fiscale è già presente nel database.
+>>>>>>> upstream/uf15-2026/asyncValidator
             </p-message>
           }
         }

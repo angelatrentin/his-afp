@@ -17,6 +17,7 @@ import { jWTHeaderInterceptor } from './core/auth/jwtheader-interceptor';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
+    provideHttpClient(withInterceptors([jWTHeaderInterceptor])),
     provideRouter(routes, withComponentInputBinding()),
     provideHttpClient(withInterceptors([jWTHeaderInterceptor])),
     providePrimeNG({

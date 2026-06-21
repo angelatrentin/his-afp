@@ -1,6 +1,7 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 
 export const jWTHeaderInterceptor: HttpInterceptorFn = (req, next) => {
+<<<<<<< HEAD
   const reqClone = req.clone({
     headers: req.headers.set(
       'Authorization',
@@ -8,4 +9,10 @@ export const jWTHeaderInterceptor: HttpInterceptorFn = (req, next) => {
     ),
   });
   return next(reqClone);
+=======
+  const reqWithHeader = req.clone({
+    headers: req.headers.set('Authorization', `Bearer ${localStorage.getItem('token')}`),
+  });
+  return next(reqWithHeader);
+>>>>>>> upstream/uf15-2026/asyncValidator
 };

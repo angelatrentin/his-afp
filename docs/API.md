@@ -423,6 +423,60 @@ Aggiorna lo stato di avanzamento del paziente.
 }
 ```
 
+### 4.5 Ricerca paziente
+
+Ricerca pazienti per nome, cognome, data di nascita o codice fiscale
+
+* **Endpoint:** `GET /admissions/search`
+* **Query Parameters:**
+    * Ricerca per anagrafica
+        * `nome`
+        * `cognome`
+        * `dataNascita` (formato ISO)
+    * Ricerca per Codice Fiscale
+        * `cf` (codice fiscale completo)
+
+> Se viene fornito `codiceFiscale`, ignora gli altri parametri di ricerca anagrafica.
+
+**Esempio di richiesta:**
+
+* ```GET /patients/search?nome=Elena&cognome=Ferrari&data_nascita=1975-09-05T00:00:00.000Z```
+* ```GET /patients/search?cf=FRRLNE75P45D612J```
+
+**Response (200 OK) con Risultati:**
+
+```json
+{
+  "status": "success",
+  "results": 1,
+  "data": [
+    {
+      "id": 7,
+      "codice_fiscale": "FRRLNE75P45D612J",
+      "nome": "Elena",
+      "cognome": "Ferrari",
+      "data_nascita": "1975-09-04T22:00:00.000Z",
+      "sex": "F",
+      "indirizzo_via": "Viale dei Pini",
+      "indirizzo_civico": "33",
+      "comune": "Firenze",
+      "provincia": "FI",
+      "created_at": "2026-04-13T11:46:52.696Z"
+    }
+  ]
+}
+```
+
+**Response (200 OK) senza risultati:**
+
+```json
+{
+  "status": "success",
+  "results": 0,
+  "data": []
+}
+```
+
 ## 5. Gestione personale sanitario (Utenti)
 
 Gestione anagrafica operatori e validazione asincrona.

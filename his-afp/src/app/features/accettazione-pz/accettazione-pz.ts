@@ -9,8 +9,12 @@ import { SelectModule } from 'primeng/select';
 import { Textarea } from 'primeng/textarea';
 import { Fieldset } from 'primeng/fieldset';
 import { PatientManager } from '../../core/Pazienti/patient-manager';
+<<<<<<< HEAD
 import { PatientAdmission } from '../../core/Pazienti/Pazienti.model';
 import { AsyncCFCheck } from '../../core/Pazienti/asyncCFCheck';
+=======
+import { AsyncCheckCF } from '../../core/Pazienti/asyncCheckCF';
+>>>>>>> upstream/uf15-2026/asyncValidator
 
 @Component({
   selector: 'his-accettazione-pz',
@@ -53,7 +57,12 @@ export class AccettazionePz {
       codiceFiscale: [
         '',
         [Validators.required, Validators.pattern('[A-Z]{6}\\d{2}[A-Z]\\d{2}[A-Z]\\d{3}[A-Z]')],
+<<<<<<< HEAD
         [AsyncCFCheck.check(this.patientManager)],
+=======
+        [AsyncCheckCF.check(this.patientManager)],
+        // {pattern: {requiredPattern: '^[a-zA-Z ]*$', actualValue: '1'}}
+>>>>>>> upstream/uf15-2026/asyncValidator
       ],
       sesso: ['', [Validators.required]],
     }),
@@ -82,7 +91,7 @@ export class AccettazionePz {
   onSubmit() {
     if (this.paziente.valid) {
       console.log(this.paziente.value);
-      this.patientManager.admitPatient(this.paziente.value as PatientAdmission);
+      this.patientManager.admitPatient(this.paziente.value as any);
     } else {
       this.paziente.markAllAsTouched();
     }

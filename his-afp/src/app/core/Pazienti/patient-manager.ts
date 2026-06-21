@@ -1,5 +1,15 @@
 import { inject, Injectable, signal } from '@angular/core';
+<<<<<<< HEAD
 import { Anagrafica, PatientAdmission, PatientAdmissionRes, Paziente, PazienteDTO } from './Pazienti.model';
+=======
+import {
+  Anagrafica,
+  PatientAdmission,
+  PatientAdmissionRes,
+  Paziente,
+  PazienteDTO,
+} from './Pazienti.model';
+>>>>>>> upstream/uf15-2026/asyncValidator
 import { HttpClient } from '@angular/common/http';
 import { APIResponse } from '../models/APIResponse.model';
 import { environment } from '../../../environments/environment';
@@ -44,6 +54,10 @@ export class PatientManager {
         console.error('Errore durante il fetch dei pazienti:', err);
       },
     });
+  }
+
+  public ricercaPaziente(cf: string) {
+    return this.#http.get<APIResponse<Anagrafica[]>>(`/api/patients/search?cf=${cf}`);
   }
 
   public admitPatient(pz: PatientAdmission) {
