@@ -8,49 +8,69 @@ services:
       POSTGRES_USER: sio_user
       POSTGRES_PASSWORD: sio_password
       POSTGRES_DB: sio_db
-    ports:
-      - "5432:5432"
+    #    ports:
+    #      - "5432:5432"
     volumes:
       - pg_data:/var/lib/postgresql/data
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: always
+    networks:
+      - backend-net
 
   backend:
     build: ./backend
     container_name: sio-backend
-    ports:
-      - "3000:3000"
+    #    ports:
+    #      - "3000:3000"
     environment:
       DB_HOST: db
       DB_USER: sio_user
       DB_PASS: sio_password
       DB_NAME: sio_db
       JWT_SECRET: "chiave_segreta_super_sicura_per_il_corso_segretissimissima"
-      AUTH_ENABLED: "false"
+      AUTH_ENABLED: "true"
     depends_on:
       - db
     restart: always
+    networks:
+      - backend-net
 
   fe-sio:
     build:
       context: ./his-afp
       dockerfile: Dockerfile
-    image: his-afp:${SVI_VERSION:-latest}
+    image: his-afp:${SVI_VERSION}
     container_name: sio-fe-sio
+    environment:
+      APP_ENV: "SVI"
+      APP_VERSION: "${SVI_VERSION}"
+    networks:
+      - fe-net
 
   # AMBIENTE PRODUZIONE (BLUE)
   fe-prod:
     build:
       context: ./his-afp
       dockerfile: Dockerfile
-    image: his-afp:${PROD_VERSION:-latest}
+    image: his-afp:${PROD_VERSION}
     container_name: sio-fe-prod
+    environment:
+      APP_ENV: "PROD"
+      APP_VERSION: "${PROD_VERSION}"
+    networks:
+      - fe-net
 
   fe-test:
     build:
       context: ./his-afp
       dockerfile: Dockerfile
-    image: his-afp:${TEST_VERSION:-latest}
+    image: his-afp:${TEST_VERSION}
     container_name: sio-fe-test
+    environment:
+      APP_ENV: "TEST"
+      APP_VERSION: "${TEST_VERSION}"
+    networks:
+      - fe-net
 
   gateway:
     image: nginx:alpine
@@ -59,13 +79,25 @@ services:
       - "80:80"
       - "8080:8080"
       - "8999:8999"
+      - "5432:5432"
     volumes:
-      - ./gateway:/etc/nginx/conf.d/:ro
+      - ./gateway/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./gateway/nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - fe-sio
       - fe-prod
       - fe-test
     restart: always
+    networks:
+      - fe-net
+      - backend-net
 
 volumes:
   pg_data:
+
+networks:
+  fe-net:
+    driver: bridge
+
+  backend-net:
+    driver: bridge

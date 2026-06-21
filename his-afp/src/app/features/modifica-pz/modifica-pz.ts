@@ -13,6 +13,7 @@ import { Textarea } from 'primeng/textarea';
 import { GestioneRisorse } from '../../core/Risorse/gestione-risorse';
 import { formatDate } from '@angular/common';
 import { PatientManager } from '../../core/Pazienti/patient-manager';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'his-modifica-pz',
@@ -36,7 +37,7 @@ export class ModificaPz {
   gestioneRisorse = inject(GestioneRisorse);
   patientManager = inject(PatientManager);
   patientReq = httpResource<APIResponse<PazienteDTO>>(
-    () => `http://localhost:3000/admissions/${this.patientId()}`,
+    () => `${environment.apiUrl}/admissions/${this.patientId()}`,
   );
   readonly maxDate = new Date();
   readonly sexOption = [
@@ -59,7 +60,6 @@ export class ModificaPz {
       codiceFiscale: [
         '',
         [Validators.required, Validators.pattern('[A-Z]{6}\\d{2}[A-Z]\\d{2}[A-Z]\\d{3}[A-Z]')],
-        // {pattern: {requiredPattern: '^[a-zA-Z ]*$', actualValue: '1'}}
       ],
       sesso: ['', [Validators.required]],
     }),
