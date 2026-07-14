@@ -1,0 +1,46 @@
+<div class="p-6">
+  <div class="flex justify-between items-center mb-4">
+    <h1 class="text-2xl font-bold">Gestione Anagrafica Staff</h1>
+    <p-button label="Nuovo Operatore" icon="pi pi-plus" (onClick)="showForm.set(true)" />
+  </div>
+
+  @if (error()) {
+    <p class="text-red-500 mb-4">{{ error() }}</p>
+  }
+
+  <p-table [value]="staffList()" [loading]="loading()" stripedRows>
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Username</th>
+        <th>Ruolo</th>
+        <th>Stato</th>
+        <th>Azioni</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-member>
+      <tr>
+        <td>{{ member.username }}</td>
+        <td>{{ getRoleLabel(member.role) }}</td>
+        <td>
+          <p-tag
+            [value]="member.isActive ? 'Attivo' : 'Disattivo'"
+            [severity]="member.isActive ? 'success' : 'danger'" />
+        </td>
+        <td>
+          <p-button
+            [label]="member.isActive ? 'Disattiva' : 'Attiva'"
+            [severity]="member.isActive ? 'warn' : 'success'"
+            size="small"
+            (onClick)="onToggleActive(member)" />
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr><td colspan="4" class="text-center p-4">Nessun operatore trovato</td></tr>
+    </ng-template>
+  </p-table>
+
+  <p-dialog header="Nuovo Operatore" [(visible)]="showForm" [modal]="true" [style]="{ width: '450px' }">
+    <app-staff-form (saved)="onFormSaved()" (cancelled)="showForm.set(false)" />
+  </p-dialog>
+</div>
