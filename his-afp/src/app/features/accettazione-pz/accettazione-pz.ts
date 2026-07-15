@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, OnChanges } from '@angular/core';
 import { GestioneRisorse } from '../../core/Risorse/gestione-risorse';
 import { InputText } from 'primeng/inputtext';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -10,38 +10,24 @@ import { Textarea } from 'primeng/textarea';
 import { Fieldset } from 'primeng/fieldset';
 import { PatientManager } from '../../core/Pazienti/patient-manager';
 import { PatientAdmission } from '../../core/Pazienti/Pazienti.model';
+import { PazienteDTO } from '../../core/Pazienti/Pazienti.model';
 
 @Component({
   selector: 'his-accettazione-pz',
-  imports: [
-    InputText,
-    ReactiveFormsModule,
-    Button,
-    Message,
-    DatePicker,
-    SelectModule,
-    Textarea,
-    Fieldset,
-  ],
+  imports: [InputText, ReactiveFormsModule, Button, Message, DatePicker, SelectModule, Textarea, Fieldset],
   templateUrl: './accettazione-pz.html',
   styleUrl: './accettazione-pz.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AccettazionePz {
+export class AccettazionePz implements OnChanges {
   gestioneRisorse = inject(GestioneRisorse);
   patientManager = inject(PatientManager);
 
+  /** Paziente preselezionato dalla ricerca (null = nuovo paziente) */
+  pazientePreselezionato = input<PazienteDTO | null>(null);
+
   readonly maxDate = new Date();
-  readonly sexOption = [
-    {
-      code: 'M',
-      desc: 'Maschio',
-    },
-    {
-      code: 'F',
-      desc: 'Femmina',
-    },
-  ];
+  readonly sexOption = [{ code: 'M', desc: 'Maschio' }, { code: 'F', desc: 'Femmina' }];
 
   readonly #fb = inject(FormBuilder);
   paziente = this.#fb.group({
@@ -49,11 +35,8 @@ export class AccettazionePz {
       nome: ['', [Validators.required]],
       cognome: ['', [Validators.required]],
       dataNascita: ['', [Validators.required]],
-      codiceFiscale: [
-        '',
-        [Validators.required, Validators.pattern('[A-Z]{6}\\d{2}[A-Z]\\d{2}[A-Z]\\d{3}[A-Z]')],
-        // {pattern: {requiredPattern: '^[a-zA-Z ]*$', actualValue: '1'}}
-      ],
+      codiceFiscale: ['', [Validators.required,
+        Validators.pattern('[A-Z]{6}\\d{2}[A-Z]\\d{2}[A-Z]\\d{3}[A-Z]')]],
       sesso: ['', [Validators.required]],
     }),
     sanitaria: this.#fb.group({
@@ -64,23 +47,35 @@ export class AccettazionePz {
     }),
   });
 
-  checkFormControl(control: string) {
-    const fc = this.paziente.get(control);
-    // nome.invalid && (nome.touched || nome.dirty)
-    return fc?.invalid && (fc.touched || fc.dirty);
-  }
-  checkFormControlError(control: string, err: string) {
-    const fc = this.paziente.get(control);
-
-    if (fc && fc.hasError(err)) {
-      return fc.getError(err);
+  ngOnChanges(): void {
+    const pz = this.pazientePreselezionato();
+    if (pz) {
+      this.paziente.patchValue({
+        anagrafica: {
+          nome: pz.nome,
+          cognome: pz.cognome,
+          dataNascita: pz.dataNascita,
+          codiceFiscale: pz.codiceFiscale,
+          sesso: pz.sex,
+        },
+      });
     } else {
-      return null;
+      this.paziente.reset();
     }
   }
+
+  checkFormControl(control: string) {
+    const fc = this.paziente.get(control);
+    return fc?.invalid && (fc.touched || fc.dirty);
+  }
+
+  checkFormControlError(control: string, err: string) {
+    const fc = this.paziente.get(control);
+    return fc?.hasError(err) ? fc.getError(err) : null;
+  }
+
   onSubmit() {
     if (this.paziente.valid) {
-      console.log(this.paziente.value);
       this.patientManager.admitPatient(this.paziente.value as PatientAdmission);
     } else {
       this.paziente.markAllAsTouched();

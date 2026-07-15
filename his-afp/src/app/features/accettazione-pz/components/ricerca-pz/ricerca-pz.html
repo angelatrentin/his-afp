@@ -1,0 +1,76 @@
+<div class="flex flex-col gap-6 p-4">
+  <h2 class="text-xl font-semibold">Ricerca Paziente</h2>
+
+  <!-- SELEZIONE MODALITÀ -->
+  <p-selectButton
+    [options]="modeOptions"
+    [ngModel]="searchMode()"
+    optionLabel="label"
+    optionValue="value"
+    (ngModelChange)="onModeChange($event)"
+  />
+
+  <!-- RICERCA PER CF -->
+  @if (searchMode() === 'cf') {
+    <form [formGroup]="formCF" (ngSubmit)="onCercaCF()" class="flex flex-col gap-3">
+      <div class="flex flex-col gap-1">
+        <label>Codice Fiscale</label>
+        <input pInputText formControlName="codiceFiscale" placeholder="RSSMRA80E20H501U" class="uppercase" />
+        @if (formCF.get('codiceFiscale')?.errors?.['required'] && formCF.get('codiceFiscale')?.touched) {
+          <small class="text-red-500">Campo obbligatorio</small>
+        }
+        @if (formCF.get('codiceFiscale')?.errors?.['pattern'] && formCF.get('codiceFiscale')?.touched) {
+          <small class="text-red-500">Formato CF non valido</small>
+        }
+      </div>
+      <p-button label="Cerca" type="submit" icon="pi pi-search" />
+    </form>
+  }
+
+  <!-- RICERCA PER ANAGRAFICA -->
+  @if (searchMode() === 'anagrafica') {
+    <form [formGroup]="formAnagrafica" (ngSubmit)="onCercaAnagrafica()" class="flex flex-col gap-3">
+      <div class="flex flex-row gap-4">
+        <div class="flex flex-col gap-1 flex-1">
+          <label>Nome</label>
+          <input pInputText formControlName="nome" />
+          @if (formAnagrafica.get('nome')?.errors?.['required'] && formAnagrafica.get('nome')?.touched) {
+            <small class="text-red-500">Campo obbligatorio</small>
+          }
+        </div>
+        <div class="flex flex-col gap-1 flex-1">
+          <label>Cognome</label>
+          <input pInputText formControlName="cognome" />
+          @if (formAnagrafica.get('cognome')?.errors?.['required'] && formAnagrafica.get('cognome')?.touched) {
+            <small class="text-red-500">Campo obbligatorio</small>
+          }
+        </div>
+      </div>
+      <div class="flex flex-col gap-1">
+        <label>Data di Nascita</label>
+        <p-datePicker formControlName="dataNascita" dateFormat="dd/mm/yy" [maxDate]="maxDate" />
+        @if (formAnagrafica.get('dataNascita')?.errors?.['required'] && formAnagrafica.get('dataNascita')?.touched) {
+          <small class="text-red-500">Campo obbligatorio</small>
+        }
+      </div>
+      <p-button label="Cerca" type="submit" icon="pi pi-search" />
+    </form>
+  }
+
+  <!-- RISULTATI -->
+  @if (cercato()) {
+    @if (nessunRisultato()) {
+      <p-message severity="warn" text="Nessun paziente trovato." />
+      <p-button label="Nuovo Paziente" icon="pi pi-user-plus" severity="success" (onClick)="nuovoPaziente()" />
+    } @else {
+      <div class="flex flex-col gap-2">
+        @for (pz of risultati(); track pz.id) {
+          <div class="flex justify-between items-center border rounded p-3">
+            <span>{{ pz.cognome }} {{ pz.nome }} — CF: {{ pz.codiceFiscale }} — Nato il: {{ pz.dataNascita | date:'dd/MM/yyyy' }}</span>
+            <p-button label="Seleziona" size="small" (onClick)="selezionaPaziente(pz)" />
+          </div>
+        }
+      </div>
+    }
+  }
+</div>
