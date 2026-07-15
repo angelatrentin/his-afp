@@ -126,3 +126,5 @@ Allinterno della cartella `docs/` sono presenti documenti dettagliati riguardant
 # Licenza
 
 Questo progetto è concesso in licenza sotto la Licenza MIT - vedere il file [LICENSE](LICENSE) per i dettagli.
+
+Vedi [docs/blue-green-deployment.md](docs/blue-green-deployment.md) per la documentazione su Blue/Green deployment e tunnel database.
