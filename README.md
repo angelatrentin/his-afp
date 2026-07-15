@@ -126,3 +126,7 @@ Allinterno della cartella `docs/` sono presenti documenti dettagliati riguardant
 # Licenza
 
 Questo progetto è concesso in licenza sotto la Licenza MIT - vedere il file [LICENSE](LICENSE) per i dettagli.
+
+## Documentazione Architetturale
+
+Vedi [docs/migrazione-architetturale.md](docs/migrazione-architetturale.md) per la documentazione completa della migrazione infrastrutturale.
