@@ -130,3 +130,5 @@ Questo progetto è concesso in licenza sotto la Licenza MIT - vedere il file [LI
 ## Documentazione Architetturale
 
 Vedi [docs/migrazione-architetturale.md](docs/migrazione-architetturale.md) per la documentazione completa della migrazione infrastrutturale.
+
+Vedi [docs/blue-green-deployment.md](docs/blue-green-deployment.md) per la documentazione su Blue/Green deployment e tunnel database.

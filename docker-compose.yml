@@ -1,5 +1,4 @@
 #version: "3.8"
-
 services:
   db:
     image: postgres:15-alpine
@@ -8,17 +7,18 @@ services:
       POSTGRES_USER: sio_user
       POSTGRES_PASSWORD: sio_password
       POSTGRES_DB: sio_db
-    ports:
-      - "5432:5432"
+    # Porta NON esposta verso l'host: accessibile solo tramite gateway (tunnel stream)
     volumes:
       - pg_data:/var/lib/postgresql/data
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: always
+    networks:
+      - backend-net
 
-  backend:
+  # BACKEND BLUE (versione stabile in produzione)
+  sio-backend-blue:
     build: ./backend
-    container_name: sio-backend
-    #    ports:
-    #      - "3000:3000"
+    container_name: sio-backend-blue
     environment:
       DB_HOST: db
       DB_USER: sio_user
@@ -29,6 +29,26 @@ services:
     depends_on:
       - db
     restart: always
+    networks:
+      - backend-net
+
+  # BACKEND GREEN (nuova versione in test — commentato di default)
+  # Per attivare: decommentare questo blocco e modificare proxy_pass in gateway/default.conf
+  # sio-backend-green:
+  #   build: ./backend
+  #   container_name: sio-backend-green
+  #   environment:
+  #     DB_HOST: db
+  #     DB_USER: sio_user
+  #     DB_PASS: sio_password
+  #     DB_NAME: sio_db
+  #     JWT_SECRET: "chiave_segreta_super_sicura_per_il_corso_segretissimissima"
+  #     AUTH_ENABLED: "false"
+  #   depends_on:
+  #     - db
+  #   restart: always
+  #   networks:
+  #     - backend-net
 
   fe-sio:
     build:
@@ -39,8 +59,9 @@ services:
     environment:
       APP_ENV: "SVI"
       APP_VERSION: "${SVI_VERSION}"
+    networks:
+      - fe-net
 
-  # AMBIENTE PRODUZIONE (BLUE)
   fe-prod:
     build:
       context: ./his-afp
@@ -50,6 +71,8 @@ services:
     environment:
       APP_ENV: "PROD"
       APP_VERSION: "${PROD_VERSION}"
+    networks:
+      - fe-net
 
   fe-test:
     build:
@@ -60,6 +83,8 @@ services:
     environment:
       APP_ENV: "TEST"
       APP_VERSION: "${TEST_VERSION}"
+    networks:
+      - fe-net
 
   gateway:
     image: nginx:alpine
@@ -68,13 +93,24 @@ services:
       - "80:80"
       - "8080:8080"
       - "8999:8999"
+      - "5432:5432"
     volumes:
-      - ./gateway:/etc/nginx/conf.d/:ro
+      - ./gateway/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./gateway/nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - fe-sio
       - fe-prod
       - fe-test
     restart: always
+    networks:
+      - fe-net
+      - backend-net
 
 volumes:
   pg_data:
+
+networks:
+  fe-net:
+    driver: bridge
+  backend-net:
+    driver: bridge
