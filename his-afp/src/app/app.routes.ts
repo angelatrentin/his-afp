@@ -27,6 +27,11 @@ export const routes: Routes = [
       import('./features/staff/pages/staff-list/staff-list').then((m) => m.StaffListComponent),
   },
   {
+    path: 'monitor-dimessi',
+    loadComponent: () =>
+      import('./features/monitor-dimessi/monitor-dimessi').then((m) => m.MonitorDimessi),
+  },
+  {
     path: '',
     redirectTo: 'lista-pz',
     pathMatch: 'full',
