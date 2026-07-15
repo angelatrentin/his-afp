@@ -1,0 +1,45 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4 p-4">
+  <h2 class="text-xl font-semibold">Nuovo Operatore</h2>
+
+  <!-- USERNAME -->
+  <div class="flex flex-col gap-1">
+    <label for="username">Username</label>
+    <input pInputText id="username" formControlName="username" placeholder="es. mario.rossi" />
+    @if (username?.pending) {
+      <small class="text-gray-400">Verifica disponibilità...</small>
+    }
+    @if (username?.errors?.['required'] && username?.touched) {
+      <small class="text-red-500">Username obbligatorio</small>
+    }
+    @if (username?.errors?.['minlength'] && username?.touched) {
+      <small class="text-red-500">Minimo 3 caratteri</small>
+    }
+    @if (username?.errors?.['usernameTaken']) {
+      <small class="text-red-500">Username già in uso</small>
+    }
+  </div>
+
+  <!-- PASSWORD -->
+  <div class="flex flex-col gap-1">
+    <label for="password">Password</label>
+    <p-password id="password" formControlName="password" [feedback]="false" [toggleMask]="true" styleClass="w-full" />
+    @if (password?.errors?.['required'] && password?.touched) {
+      <small class="text-red-500">Password obbligatoria</small>
+    }
+  </div>
+
+  <!-- RUOLO -->
+  <div class="flex flex-col gap-1">
+    <label for="role">Ruolo</label>
+    <p-select id="role" formControlName="role" [options]="roleOptions" optionLabel="label" optionValue="value" placeholder="Seleziona ruolo" styleClass="w-full" />
+    @if (role?.errors?.['required'] && role?.touched) {
+      <small class="text-red-500">Ruolo obbligatorio</small>
+    }
+  </div>
+
+  <!-- AZIONI -->
+  <div class="flex gap-2 justify-end">
+    <p-button label="Annulla" severity="secondary" type="button" (onClick)="onCancel()" />
+    <p-button label="Salva" type="submit" [disabled]="form.invalid || form.pending" />
+  </div>
+</form>
