@@ -6,9 +6,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/lista-pz/lista-pz').then((m) => m.ListaPz),
   },
   {
-    path: 'accettazione-pz',
-    loadComponent: () =>
-      import('./features/accettazione-pz/accettazione-pz').then((m) => m.AccettazionePz),
+  path: 'accettazione-pz',
+  loadComponent: () =>
+    import('./features/accettazione-pz/pages/accettazione-wrapper/accettazione-wrapper')
+      .then((m) => m.AccettazioneWrapperComponent),
   },
   // {
   //   path: 'modifica-pz',
